@@ -1,0 +1,1 @@
+<div class='p-3'><h4>Reportes</h4><p>Contenido del módulo reportes.</p></div>

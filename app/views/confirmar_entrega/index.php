@@ -1,0 +1,1 @@
+<h4>Confirmar Entrega</h4><p>Marca tus entregas como recibidas desde este módulo.</p>

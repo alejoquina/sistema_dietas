@@ -1,0 +1,1 @@
+<div class='p-3'><h4>Asignación de Dietas</h4><p>Contenido del módulo asignaciones.</p></div>
