@@ -19,10 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $restriccion->eliminar($id);
         }
     } else {
+        $tipo = $_POST['tipo'] ?? '';
         $descripcion = $_POST['descripcion'] ?? '';
-        if ($descripcion) {
-            $restriccion->crear($descripcion);
+        $prohibido = $_POST['alimentos_prohibidos'];
+        
+
+        if ($descripcion && $descripcion && $prohibido) {
+            $restriccion->crear($tipo,$descripcion,$prohibido);
         }
+        
     }
 }
 
