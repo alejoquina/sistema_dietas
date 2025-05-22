@@ -7,9 +7,10 @@ class RestriccionAlimenticia extends Model {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function crear($descripcion) {
-        $stmt = $this->db->prepare("INSERT INTO RESTRICCION_ALIMENTICIA (descripcion, fecha_creacion) VALUES (?, NOW())");
-        return $stmt->execute([$descripcion]);
+    public function crear($tipo,$descripcion,$restricion) {
+
+        $stmt = $this->db->prepare("INSERT INTO RESTRICCION_ALIMENTICIA (tipo,descripcion,alimentos_prohibidos,fecha_creacion) VALUES (?,?,?, NOW())");
+        return $stmt->execute([$tipo, $descripcion, $restricion]);
     }
 
     public function eliminar($id) {

@@ -35,15 +35,21 @@ $lista = $paciente->listar();
 
     <table class="table table-bordered table-sm">
         <thead>
-            <tr><th>ID</th><th>Nombre</th><th>Edad</th><th>Contacto</th><th>Acción</th></tr>
+            <tr>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Contacto</th>
+                <th>Email</th>
+                <th>Acción</th>
+            </tr>
         </thead>
         <tbody>
             <?php foreach ($lista as $p): ?>
             <tr>
-                <td><?= $p['id'] ?></td>
                 <td><?= htmlspecialchars($p['nombre_usuario']) ?></td>
                 <td><?= $p['edad'] ?></td>
                 <td><?= htmlspecialchars($p['contacto']) ?></td>
+                <td><?= htmlspecialchars($p['email']) ?></td>
                 <td>
                     <form method="POST" action="/sistema_nutricion/app/controllers/PacienteController.php" class="d-inline">
                         <input type="hidden" name="id" value="<?= $p['id'] ?>">

@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../core/Model.php';
 
 class Paciente extends Model {
     public function listar() {
-        $sql = "SELECT p.id, u.nombre AS nombre_usuario, p.edad, p.contacto 
+        $sql = "SELECT p.id, u.nombre AS nombre_usuario, p.edad, p.contacto, u.email 
                 FROM paciente p 
                 INNER JOIN usuario u ON u.id = p.usuario_id";
         $stmt = $this->db->query($sql);
