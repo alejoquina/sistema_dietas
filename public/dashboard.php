@@ -13,8 +13,14 @@ if (!$usuario) {
 <head>
     <meta charset="UTF-8">
     <title>Panel principal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.css" rel="stylesheet">
+    <!-- Bootstrap JS (incluye Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
     <style>
         body { display: flex; height: 100vh; }
         .sidebar {
@@ -33,6 +39,9 @@ if (!$usuario) {
 </head>
 <body>
     <div class="sidebar d-flex flex-column p-3 shadow-sm">
+             <div class="text-center">
+                <img src="/sistema_nutricion/img/logo2.png" alt="Logo" style="height: 100px; margin-bottom: 5px;">
+              </div>
         <h4 class="text-center mb-4">Panel <?= htmlspecialchars($usuario['nombre']) ?></h4>
         <span class="text-muted text-center mb-3">Usuario: <?= htmlspecialchars($usuario['email']) ?></span>
 

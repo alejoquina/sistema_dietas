@@ -18,12 +18,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id) {
             $usuario->eliminar($id);
         }
+    }elseif (isset($_POST['accion']) && $_POST['accion'] === 'editar') {
+     $id = $_POST['id'] ?? null;
+     $nombre = $_POST['nombre'] ?? '';
+     $email = $_POST['email'] ?? '';
+     $password = $_POST['password'] ?? '';
+     $rol_id = $_POST['rol_id'] ?? 4;
     } else {
         $nombre = $_POST['nombre'] ?? '';
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
         $rol_id = $_POST['rol_id'] ?? 4;
-
+    
         if ($nombre && $email && $password && $rol_id) {
             $usuario->crear($nombre, $email, $password, $rol_id);
         }
