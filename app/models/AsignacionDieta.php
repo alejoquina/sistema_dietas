@@ -19,4 +19,23 @@ class AsignacionDieta extends Model {
                                     VALUES (?, ?, ?, ?)");
         return $stmt->execute([$paciente_id, $dieta_id, $fecha_asignacion, $enfermero_id]);
     }
+
+    public function listarDietas(){
+        $sql = "SELECT * FROM dieta";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function listarEnfermeros(){
+        $sql = "SELECT e.usuario_id, e.area, u.nombre, u.email 
+                FROM enfermero e 
+                INNER JOIN usuario u ON e.usuario_id = u.id";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function eliminar($id) {
+        $stmt = $this->db->prepare("DELETE FROM asignacion_dieta WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
 }
