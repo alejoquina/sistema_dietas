@@ -45,7 +45,12 @@ if (!$usuario) {
             <a class="nav-link" data-view="asignaciones"><i data-lucide="send"></i> Asignación de Dietas</a>
             <a class="nav-link" data-view="reportes"><i data-lucide="file-text"></i> Reportes</a>
             <a class="nav-link" data-view="confirmaciones"><i data-lucide="check-square"></i> Confirmación de Entrega</a>
-        <?php elseif ($usuario['rol_id'] == 4): ?>
+        <?php elseif ($usuario['rol_id'] == 2): ?>
+            <a class="nav-link" data-view="nutricionista"><i data-lucide="utensils-crossed"></i> Panel Nutricionista</a>
+        <?php elseif ($usuario['rol_id'] == 3): ?>
+            <a class="nav-link" data-view="enfermero"><i data-lucide="shield-check"></i> Panel Enfermero</a>
+    
+<?php elseif ($usuario['rol_id'] == 4): ?>
             <a class="nav-link" data-view="perfil"><i data-lucide="user"></i> Mi Perfil</a>
             <a class="nav-link" data-view="dieta_personal"><i data-lucide="utensils"></i> Mi Dieta</a>
             <a class="nav-link" data-view="confirmar_entrega"><i data-lucide="check-circle"></i> Confirmar Entrega</a>
