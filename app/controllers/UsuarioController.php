@@ -13,24 +13,41 @@ $pdo = $db->connect();
 $usuario = new Usuario($pdo);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['accion']) && $_POST['accion'] === 'eliminar') {
+    $accion = $_POST['accion'] ?? '';
+
+    if ($accion === 'eliminar') {
         $id = $_POST['id'] ?? null;
         if ($id) {
             $usuario->eliminar($id);
         }
-    }elseif (isset($_POST['accion']) && $_POST['accion'] === 'editar') {
-     $id = $_POST['id'] ?? null;
-     $nombre = $_POST['nombre'] ?? '';
-     $email = $_POST['email'] ?? '';
-     $password = $_POST['password'] ?? '';
-     $rol_id = $_POST['rol_id'] ?? 4;
-    } else {
+
+    } elseif ($accion === 'editar') {
+        $id = $_POST['id'] ?? null;
         $nombre = $_POST['nombre'] ?? '';
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
         $rol_id = $_POST['rol_id'] ?? 4;
-    
+
+        // Solo hashea si el campo contraseña no está vacío
+        if (!empty($password)) {
+            $password = password_hash($password, PASSWORD_DEFAULT);
+        } else {
+            $password = null;
+        }
+
+        if ($id && $nombre && $email && $rol_id) {
+            $usuario->editar($id, $nombre, $email, $password, $rol_id);
+        }
+
+    } else {
+        // Acción por defecto: crear
+        $nombre = $_POST['nombre'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $rol_id = $_POST['rol_id'] ?? 4;
+
         if ($nombre && $email && $password && $rol_id) {
+            $password = password_hash($password, PASSWORD_DEFAULT);
             $usuario->crear($nombre, $email, $password, $rol_id);
         }
     }

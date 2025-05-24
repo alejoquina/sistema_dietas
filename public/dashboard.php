@@ -77,20 +77,45 @@ if (!$usuario) {
 
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
     <script>
-        lucide.createIcons();
-        document.querySelectorAll('.nav-link[data-view]').forEach(link => {
-            link.addEventListener('click', () => {
-                const view = link.getAttribute('data-view');
-                fetch(`/sistema_nutricion/app/views/${view}/index.php`)
-                    .then(res => res.text())
-                    .then(html => {
-                        document.getElementById('contenido').innerHTML = html;
-                        lucide.createIcons();
-                    }).catch(() => {
-                        document.getElementById('contenido').innerHTML = "<p class='text-danger'>No se pudo cargar el módulo.</p>";
-                    });
-            });
+    lucide.createIcons();
+
+    document.querySelectorAll('.nav-link[data-view]').forEach(link => {
+        link.addEventListener('click', () => {
+            const view = link.getAttribute('data-view');
+            fetch(`/sistema_nutricion/app/views/${view}/index.php`)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('contenido').innerHTML = html;
+                    lucide.createIcons();
+
+                    // ⬇️ Volver a activar el evento del modal después de cargar el módulo
+                    const modal = document.getElementById('modalEditarUsuario');
+                    if (modal) {
+                        modal.addEventListener('show.bs.modal', function (event) {
+                            const button = event.relatedTarget;
+                            if (!button) return;
+
+                            const id = button.getAttribute('data-id');
+                            const nombre = button.getAttribute('data-nombre');
+                            const email = button.getAttribute('data-email');
+                            const rol_id = button.getAttribute('data-rol_id');
+
+                            document.getElementById('edit-id').value = id;
+                            document.getElementById('edit-nombre').value = nombre;
+                            document.getElementById('edit-email').value = email;
+                            document.getElementById('edit-rol_id').value = rol_id;
+                        });
+                    }
+                }).catch(() => {
+                    document.getElementById('contenido').innerHTML = "<p class='text-danger'>No se pudo cargar el módulo.</p>";
+                });
         });
+    });
+</script>
+
     </script>
+    <!-- Bootstrap JS para que funcionen los modales -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
