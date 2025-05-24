@@ -13,8 +13,14 @@ if (!$usuario) {
 <head>
     <meta charset="UTF-8">
     <title>Panel principal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.css" rel="stylesheet">
+    <!-- Bootstrap JS (incluye Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
     <style>
         body { display: flex; height: 100vh; }
         .sidebar {
@@ -33,6 +39,9 @@ if (!$usuario) {
 </head>
 <body>
     <div class="sidebar d-flex flex-column p-3 shadow-sm">
+             <div class="text-center">
+                <img src="/sistema_nutricion/img/logo2.png" alt="Logo" style="height: 100px; margin-bottom: 5px;">
+              </div>
         <h4 class="text-center mb-4">Panel <?= htmlspecialchars($usuario['nombre']) ?></h4>
         <span class="text-muted text-center mb-3">Usuario: <?= htmlspecialchars($usuario['email']) ?></span>
 
@@ -68,20 +77,45 @@ if (!$usuario) {
 
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
     <script>
-        lucide.createIcons();
-        document.querySelectorAll('.nav-link[data-view]').forEach(link => {
-            link.addEventListener('click', () => {
-                const view = link.getAttribute('data-view');
-                fetch(`/sistema_nutricion/app/views/${view}/index.php`)
-                    .then(res => res.text())
-                    .then(html => {
-                        document.getElementById('contenido').innerHTML = html;
-                        lucide.createIcons();
-                    }).catch(() => {
-                        document.getElementById('contenido').innerHTML = "<p class='text-danger'>No se pudo cargar el módulo.</p>";
-                    });
-            });
+    lucide.createIcons();
+
+    document.querySelectorAll('.nav-link[data-view]').forEach(link => {
+        link.addEventListener('click', () => {
+            const view = link.getAttribute('data-view');
+            fetch(`/sistema_nutricion/app/views/${view}/index.php`)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('contenido').innerHTML = html;
+                    lucide.createIcons();
+
+                    // ⬇️ Volver a activar el evento del modal después de cargar el módulo
+                    const modal = document.getElementById('modalEditarUsuario');
+                    if (modal) {
+                        modal.addEventListener('show.bs.modal', function (event) {
+                            const button = event.relatedTarget;
+                            if (!button) return;
+
+                            const id = button.getAttribute('data-id');
+                            const nombre = button.getAttribute('data-nombre');
+                            const email = button.getAttribute('data-email');
+                            const rol_id = button.getAttribute('data-rol_id');
+
+                            document.getElementById('edit-id').value = id;
+                            document.getElementById('edit-nombre').value = nombre;
+                            document.getElementById('edit-email').value = email;
+                            document.getElementById('edit-rol_id').value = rol_id;
+                        });
+                    }
+                }).catch(() => {
+                    document.getElementById('contenido').innerHTML = "<p class='text-danger'>No se pudo cargar el módulo.</p>";
+                });
         });
+    });
+</script>
+
     </script>
+    <!-- Bootstrap JS para que funcionen los modales -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

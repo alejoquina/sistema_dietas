@@ -30,4 +30,20 @@ class Usuario extends Model {
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+     public function editar($id, $nombre, $email, $password, $rol_id) {
+        if ($password) {
+            // Actualiza también la contraseña
+            $sql = "UPDATE USUARIO SET nombre = ?, email = ?, password = ?, rol_id = ?, ultima_actualizacion = NOW() WHERE id = ?";
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([$nombre, $email, $password, $rol_id, $id]);
+        } else {
+            // No cambia la contraseña si viene vacía
+            $sql = "UPDATE USUARIO SET nombre = ?, email = ?, rol_id = ?, ultima_actualizacion = NOW() WHERE id = ?";
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([$nombre, $email, $rol_id, $id]);
+        }
+    }
+
+    
 }

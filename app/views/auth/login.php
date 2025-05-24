@@ -8,6 +8,9 @@
 <body class="bg-light">
     <div class="container mt-5">
         <div class="row justify-content-center">
+            <div class="text-center">
+                <img src="/sistema_nutricion/img/logo.png" alt="Logo" style="height: 180px; margin-bottom: 15px;">
+              </div>
             <div class="col-md-6">
                 <h2 class="mb-4">Iniciar Sesión</h2>
                 <?php if (!empty($error)): ?>
