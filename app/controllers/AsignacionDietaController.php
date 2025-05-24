@@ -1,37 +1,64 @@
 <?php
-require_once __DIR__ . '/../../core/Controller.php';
-require_once __DIR__ . '/../models/AsignacionDieta.php';
+session_start();
+
 require_once __DIR__ . '/../models/Usuario.php';
-require_once __DIR__ . '/../models/Dieta.php';
+require_once __DIR__ . '/../models/Paciente.php';
+require_once __DIR__ . '/../models/Enfermero.php';
+require_once __DIR__ . '/../models/AsignacionDieta.php';
+require_once __DIR__ . '/../../core/Database.php';
 
-class AsignacionDietaController extends Controller {
-    public function procesar() {
-        $this->isLoggedIn();
-        $pdo = $this->db();
-        $modelo = new AsignacionDieta($pdo);
-        $usuario = new Usuario($pdo);
-        $dieta = new Dieta($pdo);
+if (!isset($_SESSION['usuario'])) {
+    header("Location: /sistema_nutricion/public/index.php");
+    exit;
+}
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $correo = $_POST['correo'] ?? '';
-            $dieta_id = $_POST['dieta_id'] ?? '';
-            $enfermero_id = $_POST['enfermero_id'] ?? '';
-            $fecha_asignacion = $_POST['fecha_asignacion'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $correo = $_POST['correo'] ?? '';
+    $dieta_id = $_POST['dieta_id'] ?? '';
+    $enfermero_usuario_id = $_POST['enfermero_id'] ?? '';
+    $fecha_asignacion = $_POST['fecha_asignacion'] ?? '';
 
-            $usuario_data = $usuario->buscarPorEmail($correo);
+    $usuarioModel = new Usuario();
+    $pacienteModel = new Paciente();
+    $enfermeroModel = new Enfermero();
+    $asignacionDietaModel = new AsignacionDieta();
 
-            if ($usuario_data) {
-                $paciente_id = $usuario_data['id'];
-                $modelo->crear($paciente_id, $dieta_id, $fecha_asignacion, $enfermero_id);
+    $usuarioData = $usuarioModel->buscarPorEmail($correo);
+
+    if ($usuarioData) {
+        $pacienteData = $pacienteModel->buscarPorUsuarioId($usuarioData['id']);
+
+        if ($pacienteData) {
+            $paciente_id = $pacienteData['id'];
+
+            $enfermero = $enfermeroModel->buscarPorUsuarioId($enfermero_usuario_id);
+            if (!$enfermero) {
+                $_SESSION['mensaje'] = "El usuario seleccionado no está registrado como enfermero.";
+                $_SESSION['tipo_mensaje'] = "danger";
+                header("Location: /sistema_nutricion/public/dashboard.php?view=asignaciones");
+                exit;
+            }
+
+            $enfermero_id = $enfermero['id'];
+
+            $crear = $asignacionDietaModel->crear($paciente_id, $dieta_id, $fecha_asignacion, $enfermero_id);
+
+            if ($crear) {
                 $_SESSION['mensaje'] = "Dieta asignada correctamente.";
                 $_SESSION['tipo_mensaje'] = "success";
             } else {
-                $_SESSION['mensaje'] = "El correo ingresado no corresponde a ningún usuario.";
+                $_SESSION['mensaje'] = "No se pudo asignar la dieta.";
                 $_SESSION['tipo_mensaje'] = "danger";
             }
-
-            header("Location: /sistema_nutricion/public/dashboard.php?view=asignaciones");
-            exit;
+        } else {
+            $_SESSION['mensaje'] = "El usuario no está registrado como paciente.";
+            $_SESSION['tipo_mensaje'] = "danger";
         }
+    } else {
+        $_SESSION['mensaje'] = "El correo ingresado no corresponde a ningún usuario.";
+        $_SESSION['tipo_mensaje'] = "danger";
     }
+
+    header("Location: /sistema_nutricion/public/dashboard.php?view=asignaciones");
+    exit;
 }
